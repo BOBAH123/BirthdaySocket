@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vlesko.birthdaywebsocket"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(project(":features:birthday:presentation"))
+    implementation(project(":features:birthday:data"))
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)

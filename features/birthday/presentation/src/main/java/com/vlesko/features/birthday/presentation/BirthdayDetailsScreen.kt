@@ -1,6 +1,5 @@
 package com.vlesko.features.birthday.presentation
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,12 +16,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,7 +32,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vlesko.features.birthday.presentation.theme.Colors
+import com.vlesko.features.birthday.presentation.models.AppTheme
+import com.vlesko.features.birthday.presentation.models.Numbers
 import com.vlesko.features.birthday.presentation.theme.Fonts.Benton_Primary
 import com.vlesko.features.birthday.presentation.viewModel.BirthdayDetailsViewModel
 import com.vlesko.features.birthday.presentation.viewModel.BirthdayDetailsViewModelState
@@ -44,6 +45,9 @@ fun BirthdayDetailsScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.connectToServer("10.0.2.16")
+    }
     BirthdayDetailsScreenContent(state)
 }
 
@@ -57,7 +61,6 @@ private fun BirthdayDetailsScreenContent(
             .fillMaxSize()
             .background(state.appTheme.bgColor)
     ) {
-
         val guidelineBottom = createGuidelineFromBottom(0.2f)
         val (titleContent, imageBlock, logo, theme) = createRefs()
 
@@ -123,26 +126,29 @@ private fun BirthdayDetailsScreenContent(
                 .padding(top = 15.dp),
             appTheme = state.appTheme
         )
-        Image(
-            modifier = Modifier.constrainAs(logo) {
-                bottom.linkTo(guidelineBottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
-            painter = painterResource(R.drawable.ic_logo),
-            contentDescription = null
-        )
 
         Image(
-            modifier = Modifier.constrainAs(theme) {
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                width = Dimension.fillToConstraints
-            },
+            modifier = Modifier
+                .constrainAs(theme) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                },
             painter = painterResource(state.appTheme.backgroundImage),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
+        )
+        Image(
+            modifier = Modifier
+                .constrainAs(logo) {
+                    bottom.linkTo(guidelineBottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .height(29.45.dp),
+            painter = painterResource(R.drawable.nanit_logo),
+            contentDescription = null
         )
     }
 }
@@ -187,50 +193,4 @@ private fun BabyImageContainer(
             )
         }
     }
-}
-
-enum class AppTheme(
-    @DrawableRes val backgroundImage: Int,
-    @DrawableRes val setPhotoImage: Int,
-    val borderColor: Color,
-    val bgColor: Color,
-) {
-    ElephantTheme(
-        backgroundImage = R.drawable.bg_android_elephant,
-        setPhotoImage = R.drawable.ic_camera_yellow,
-        borderColor = Colors.DARK_YELLOW,
-        bgColor = Colors.LIGHT_YELLOW
-    ),
-
-    FoxTheme(
-        backgroundImage = R.drawable.bg_android_fox,
-        setPhotoImage = R.drawable.ic_camera_green,
-        borderColor = Colors.DARK_GREEN,
-        bgColor = Colors.LIGHT_GREEN
-    ),
-
-    PelicanTheme(
-        backgroundImage = R.drawable.bg_android_pelican,
-        setPhotoImage = R.drawable.ic_camera_blue,
-        borderColor = Colors.DARK_BLUE,
-        bgColor = Colors.LIGHT_BLUE
-    )
-}
-
-enum class Numbers(
-    @DrawableRes val numberIcon: Int
-) {
-    ZERO(R.drawable.ic_number_0),
-    ONE(R.drawable.ic_number_1),
-    TWO(R.drawable.ic_number_2),
-    THREE(R.drawable.ic_number_3),
-    FOUR(R.drawable.ic_number_4),
-    FIVE(R.drawable.ic_number_5),
-    SIX(R.drawable.ic_number_6),
-    SEVEN(R.drawable.ic_number_7),
-    EIGHT(R.drawable.ic_number_8),
-    NINE(R.drawable.ic_number_9),
-    TEN(R.drawable.ic_number_10),
-    ELEVEN(R.drawable.ic_number_11),
-    TWELVE(R.drawable.ic_number_12)
 }
