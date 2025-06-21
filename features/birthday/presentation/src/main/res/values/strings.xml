@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Main_Title">TODAY %s IS</string>
+    <string name="Main_SubTitle_Month">MONTH OLD!</string>
+    <string name="Main_SubTitle_Years">YEARS OLD!</string>
+</resources>
