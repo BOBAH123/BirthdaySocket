@@ -3,4 +3,7 @@
     <string name="Main_Title">TODAY %s IS</string>
     <string name="Main_SubTitle_Month">MONTH OLD!</string>
     <string name="Main_SubTitle_Years">YEARS OLD!</string>
+    <string name="Add_Server_Port_Title">Add server port</string>
+    <string name="Add_Server_Ip_Title">Add server IP</string>
+    <string name="Connect_Button_Title">Connect</string>
 </resources>

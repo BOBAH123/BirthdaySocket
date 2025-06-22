@@ -26,20 +26,55 @@ class BirthdayDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             listenSocket.invoke().collectLatest { event ->
                 val takeMonth = event.age.years < 1
-                _uiState.emit(
-                    BirthdayDetailsViewModelState(
-                        appTheme = AppTheme.entries.find { it.key == event.theme } ?: AppTheme.FoxTheme,
+                updateState { state ->
+                    state.copy(
+                        appTheme = AppTheme.entries.find { it.key == event.theme }
+                            ?: AppTheme.FoxTheme,
                         age = Numbers.getNumberModel(if (takeMonth) event.age.months else event.age.years),
                         isYoungerThanAYear = takeMonth,
                         name = event.name
                     )
-                )
+                }
             }
         }
     }
 
-    fun connectToServer(port: String) {
-        createConnection(port)
+    private fun updateState(update: (BirthdayDetailsViewModelState) -> BirthdayDetailsViewModelState) {
+        viewModelScope.launch {
+            _uiState.emit(
+                update(uiState.value)
+            )
+        }
+    }
+
+    fun connectToServer() {
+        with(uiState.value) {
+            createConnection("$ip:$port")
+        }
+    }
+
+    fun onIpChanged(value: String) {
+        updateState {
+            it.copy(
+                ip = value
+            )
+        }
+    }
+
+    fun onPortChanged(value: String) {
+        updateState {
+            it.copy(
+                port = value
+            )
+        }
+    }
+
+    fun hideConnectionDialog() {
+        updateState {
+            it.copy(
+                showConnectionDialog = false
+            )
+        }
     }
 }
 
@@ -48,4 +83,7 @@ data class BirthdayDetailsViewModelState(
     val age: Numbers? = null,
     val isYoungerThanAYear: Boolean = true,
     val name: String? = null,
+    val ip: String? = null,
+    val port: String = "8080",
+    val showConnectionDialog: Boolean = true,
 )

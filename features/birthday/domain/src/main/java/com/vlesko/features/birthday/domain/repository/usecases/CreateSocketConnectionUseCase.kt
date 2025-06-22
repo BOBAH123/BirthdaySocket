@@ -5,8 +5,8 @@ import com.vlesko.features.birthday.domain.repository.repository.WebSocketReposi
 class CreateSocketConnectionUseCase(
     private val repository: WebSocketRepository
 ) {
-    operator fun invoke(port: String) {
+    operator fun invoke(connection: String) {
         repository.disconnect()
-        repository.connect("ws://$port:8080/nanit")
+        repository.connect("ws://$connection/nanit")
     }
 }
