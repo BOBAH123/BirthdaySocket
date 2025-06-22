@@ -6,4 +6,5 @@
     <string name="Add_Server_Port_Title">Add server port</string>
     <string name="Add_Server_Ip_Title">Add server IP</string>
     <string name="Connect_Button_Title">Connect</string>
+    <string name="Select_Picker_Type_Title">Select picker type:</string>
 </resources>

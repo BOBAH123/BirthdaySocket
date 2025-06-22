@@ -1,5 +1,6 @@
 package com.vlesko.features.birthday.presentation.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vlesko.features.birthday.domain.repository.usecases.CreateSocketConnectionUseCase
@@ -76,6 +77,22 @@ class BirthdayDetailsViewModel @Inject constructor(
             )
         }
     }
+
+    fun showImagePickerDialog(value: Boolean) {
+        updateState {
+            it.copy(
+                showImagePickerDialog = value
+            )
+        }
+    }
+
+    fun onImageSelected(value: Uri) {
+        updateState {
+            it.copy(
+                selectedImageUri = value
+            )
+        }
+    }
 }
 
 data class BirthdayDetailsViewModelState(
@@ -86,4 +103,6 @@ data class BirthdayDetailsViewModelState(
     val ip: String? = null,
     val port: String = "8080",
     val showConnectionDialog: Boolean = true,
+    val showImagePickerDialog: Boolean = false,
+    val selectedImageUri: Uri? = null
 )

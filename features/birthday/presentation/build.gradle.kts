@@ -52,6 +52,8 @@ dependencies {
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(project(":features:birthday:domain"))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.coil)
 
     testImplementation(libs.junit)
 

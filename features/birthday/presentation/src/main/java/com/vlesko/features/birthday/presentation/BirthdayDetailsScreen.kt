@@ -29,6 +29,7 @@ import com.vlesko.features.birthday.presentation.viewModel.BirthdayDetailsViewMo
 import com.vlesko.features.birthday.presentation.viewModel.BirthdayDetailsViewModelState
 import com.vlesko.features.birthday.presentation.views.BabyImageContainer
 import com.vlesko.features.birthday.presentation.views.ConnectionDialog
+import com.vlesko.features.birthday.presentation.views.ImagePickerDialog
 
 @Composable
 fun BirthdayDetailsScreen(
@@ -47,13 +48,22 @@ fun BirthdayDetailsScreen(
         )
     }
 
-    BirthdayDetailsScreenContent(state)
+    if (state.showImagePickerDialog) {
+        ImagePickerDialog(
+            appTheme = state.appTheme,
+            onImageSelected = viewModel::onImageSelected,
+            onDismiss = { viewModel.showImagePickerDialog(false) }
+        )
+    }
+
+    BirthdayDetailsScreenContent(state, onAddPhotoClick = { viewModel.showImagePickerDialog(true) })
 }
 
 @Preview
 @Composable
 private fun BirthdayDetailsScreenContent(
-    state: BirthdayDetailsViewModelState = BirthdayDetailsViewModelState()
+    state: BirthdayDetailsViewModelState = BirthdayDetailsViewModelState(),
+    onAddPhotoClick: () -> Unit = {},
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -123,7 +133,9 @@ private fun BirthdayDetailsScreenContent(
                 }
                 .padding(horizontal = 50.dp)
                 .padding(top = 15.dp),
-            appTheme = state.appTheme
+            appTheme = state.appTheme,
+            onAddPhotoClick = onAddPhotoClick,
+            babyImageUri = state.selectedImageUri
         )
 
         Image(

@@ -1,5 +1,6 @@
 package com.vlesko.features.birthday.presentation.views
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,9 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.vlesko.features.birthday.presentation.R
 import com.vlesko.features.birthday.presentation.models.AppTheme
 import kotlin.math.sqrt
@@ -25,7 +28,10 @@ import kotlin.math.sqrt
 @Preview
 @Composable
 fun BabyImageContainer(
-    modifier: Modifier = Modifier, appTheme: AppTheme = AppTheme.FoxTheme,
+    modifier: Modifier = Modifier,
+    appTheme: AppTheme = AppTheme.FoxTheme,
+    babyImageUri: Uri? = null,
+    onAddPhotoClick: () -> Unit = {}
 ) {
     val radiusOffset = remember { 100.dp / sqrt(2f) }
 
@@ -33,7 +39,18 @@ fun BabyImageContainer(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Icon(
+        babyImageUri?.let { uri ->
+            Image(
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(CircleShape)
+                    .background(appTheme.bgColor)
+                    .border(color = appTheme.borderColor, shape = CircleShape, width = 7.dp),
+                painter = rememberAsyncImagePainter(uri),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        } ?: Icon(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(appTheme.bgColor)
@@ -52,7 +69,7 @@ fun BabyImageContainer(
                 )
                 .align(Alignment.Center)
                 .clip(CircleShape)
-                .clickable { },
+                .clickable(onClick = onAddPhotoClick),
             contentAlignment = Alignment.Center
         ) {
             Image(
